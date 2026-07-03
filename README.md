@@ -35,12 +35,6 @@ Rather than solely relying on mathematical vectors, the application incorporates
 ### 5. Continuous Conversation Memory
 The application supports multi-turn conversations through robust state management. The frontend maintains an array of `chatHistory` containing the full conversational context. When synthesizing context for the next turn, only the Judge's final synthesized consensus is appended to the history on behalf of the "assistant". This payload is passed dynamically via POST request, updating the prompt context window for all future inferences for both the experts and the judge.
 
-### 6. "Council Chamber" Visual Design Overhaul
-The UI moves away from the generic "AI dashboard" look and implements a highly distinct "Council Chamber" visual metaphor:
-- **Typography**: Uses formal serifs (`Fraunces`) for the application title, clean sans-serifs (`Inter`) for the UI, and distinct monospaced fonts (`JetBrains Mono`) for the expert outputs to separate the AI's "voice" from the application frame.
-- **Seat Identity**: Each of the 4 models occupies a specific "Seat" in the chamber, denoted by custom color tokens (Periwinkle, Amber, Jade, Rose). These colors govern the panel borders, dropdown tints, and hover glows, giving each response visual independence.
-- **Atmosphere**: Uses a dark `bg-vignette` radial gradient paired with a faint CSS dot-grid overlay to evoke a dimly lit room or table. A custom SVG "Roundtable Divider" visually funnels the 4 seat colors down into a single, unified Gold node representing the Judge's consensus.
-
 ## 🚀 Quickstart Installation
 
 1. **Clone & Setup Environment**
