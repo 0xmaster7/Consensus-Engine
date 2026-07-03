@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="chat-container">
+  
+  <!-- Prompt form -->
+  <section class="prompt-section">
+    <textarea id="prompt-input" placeholder="Ask the council anything..." rows="3"></textarea>
+    <button id="submit-btn" onclick="startCouncil()">Ask the Council</button>
+  </section>
+
+  <!-- Current Council Deliberation -->
+  <div id="current-turn">
+    <div id="status-bar" class="status-bar hidden">
+      <span id="status-text">Waiting for experts...</span>
+      <div class="progress-dots">
+        <span class="dot" id="dot-expert1"></span>
+        <span class="dot" id="dot-expert2"></span>
+        <span class="dot" id="dot-expert3"></span>
+        <span class="dot" id="dot-expert4"></span>
+        <span class="dot" id="dot-judge"></span>
+      </div>
+    </div>
+
+    <!-- The 4 Experts -->
+    <section class="cards-grid" id="cards-grid">
+      <!-- Expert 1 -->
+      <div class="expert-card seat-zephyr" id="card-expert1">
+        <div class="card-header">
+          <select class="model-dropdown seat-zephyr" id="model-expert1">
+            <option value="HuggingFaceH4/zephyr-7b-beta" selected>Zephyr 7B (Mistral)</option>
+            <option value="meta-llama/Meta-Llama-3.1-8B-Instruct">Llama 3.1 8B</option>
+            <option value="Qwen/Qwen2.5-7B-Instruct">Qwen 2.5 7B</option>
+            <option value="google/gemma-2-9b-it">Gemma 2 9B</option>
+            <option value="microsoft/Phi-3-mini-4k-instruct">Phi-3 Mini</option>
+          </select>
+          <div class="header-actions">
+            <span class="vote-badge hidden" id="badge-expert1"></span>
+            <button class="copy-btn" onclick="copyText('expert1')">Copy</button>
+          </div>
+        </div>
+        <div class="card-status" id="status-expert1"></div>
+        <div class="card-response" id="response-expert1"></div>
+      </div>
+      
+      <!-- Expert 2 -->
+      <div class="expert-card seat-llama" id="card-expert2">
+        <div class="card-header">
+          <select class="model-dropdown seat-llama" id="model-expert2">
+            <option value="HuggingFaceH4/zephyr-7b-beta">Zephyr 7B (Mistral)</option>
+            <option value="meta-llama/Meta-Llama-3.1-8B-Instruct" selected>Llama 3.1 8B</option>
+            <option value="Qwen/Qwen2.5-7B-Instruct">Qwen 2.5 7B</option>
+            <option value="google/gemma-2-9b-it">Gemma 2 9B</option>
+            <option value="microsoft/Phi-3-mini-4k-instruct">Phi-3 Mini</option>
+          </select>
+          <div class="header-actions">
+            <span class="vote-badge hidden" id="badge-expert2"></span>
+            <button class="copy-btn" onclick="copyText('expert2')">Copy</button>
+          </div>
+        </div>
+        <div class="card-status" id="status-expert2"></div>
+        <div class="card-response" id="response-expert2"></div>
+      </div>
+
+      <!-- Expert 3 -->
+      <div class="expert-card seat-qwen" id="card-expert3">
+        <div class="card-header">
+          <select class="model-dropdown seat-qwen" id="model-expert3">
+            <option value="HuggingFaceH4/zephyr-7b-beta">Zephyr 7B (Mistral)</option>
+            <option value="meta-llama/Meta-Llama-3.1-8B-Instruct">Llama 3.1 8B</option>
+            <option value="Qwen/Qwen2.5-7B-Instruct" selected>Qwen 2.5 7B</option>
+            <option value="google/gemma-2-9b-it">Gemma 2 9B</option>
+            <option value="microsoft/Phi-3-mini-4k-instruct">Phi-3 Mini</option>
+          </select>
+          <div class="header-actions">
+            <span class="vote-badge hidden" id="badge-expert3"></span>
+            <button class="copy-btn" onclick="copyText('expert3')">Copy</button>
+          </div>
+        </div>
+        <div class="card-status" id="status-expert3"></div>
+        <div class="card-response" id="response-expert3"></div>
+      </div>
+
+      <!-- Expert 4 -->
+      <div class="expert-card seat-gemma" id="card-expert4">
+        <div class="card-header">
+          <select class="model-dropdown seat-gemma" id="model-expert4">
+            <option value="HuggingFaceH4/zephyr-7b-beta">Zephyr 7B (Mistral)</option>
+            <option value="meta-llama/Meta-Llama-3.1-8B-Instruct">Llama 3.1 8B</option>
+            <option value="Qwen/Qwen2.5-7B-Instruct">Qwen 2.5 7B</option>
+            <option value="google/gemma-2-9b-it" selected>Gemma 2 9B</option>
+            <option value="microsoft/Phi-3-mini-4k-instruct">Phi-3 Mini</option>
+          </select>
+          <div class="header-actions">
+            <span class="vote-badge hidden" id="badge-expert4"></span>
+            <button class="copy-btn" onclick="copyText('expert4')">Copy</button>
+          </div>
+        </div>
+        <div class="card-status" id="status-expert4"></div>
+        <div class="card-response" id="response-expert4"></div>
+      </div>
+    </section>
+
+    <!-- Roundtable Divider -->
+    <div class="roundtable-divider">
+      <svg width="200" height="40" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Lines converging -->
+        <line x1="20" y1="20" x2="90" y2="20" stroke="#262b38" stroke-width="1"/>
+        <line x1="180" y1="20" x2="110" y2="20" stroke="#262b38" stroke-width="1"/>
+        <!-- Seat dots -->
+        <circle cx="20" cy="20" r="3" fill="#7c8cf0" /> <!-- zephyr -->
+        <circle cx="45" cy="20" r="3" fill="#f0a860" /> <!-- llama -->
+        <circle cx="155" cy="20" r="3" fill="#6fcf97" /> <!-- qwen -->
+        <circle cx="180" cy="20" r="3" fill="#e07a9e" /> <!-- gemma -->
+        <!-- Center consensus dot -->
+        <circle cx="100" cy="20" r="4" fill="#c9a227" />
+      </svg>
+    </div>
+
+    <!-- The Judge -->
+    <div id="judge-section">
+      <div class="expert-card judge-card">
+        <div class="card-header">
+          <div class="judge-header-left">
+            <span class="model-name">👑 Ultimate Consensus</span>
+            <select class="model-dropdown judge-dropdown" id="model-judge">
+              <option value="meta-llama/Meta-Llama-3.1-8B-Instruct" selected>Llama 3.1 8B</option>
+              <option value="Qwen/Qwen2.5-7B-Instruct">Qwen 2.5 7B</option>
+              <option value="google/gemma-2-9b-it">Gemma 2 9B</option>
+            </select>
+          </div>
+          <button class="copy-btn" onclick="copyText('judge')">Copy</button>
+        </div>
+        <div class="card-status" id="status-judge"></div>
+        <div class="card-response" id="response-judge"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+<script src="council.js"></script>
+{% endblock %}
