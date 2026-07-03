@@ -18,8 +18,8 @@
   </main>
 
   <script>
-    // Make the backend URL available to JS without hardcoding
-    window.BACKEND_URL = "{{ backend_url }}";
+    // Since frontend and backend are merged, we use a relative path
+    window.BACKEND_URL = "";
   </script>
   {% block scripts %}{% endblock %}
 </body>
