@@ -6,8 +6,8 @@ load_dotenv()
 
 HF_TOKEN = os.getenv("HF_TOKEN")
 
-# These four models are available on the HuggingFace free Inference API.
-# They are well-suited for general Q&A, math/logic, and creative writing.
+# Default model IDs. Access depends on the user's Hugging Face account,
+# provider availability, and any gated-model terms.
 MODELS = {
     "mistral": "HuggingFaceH4/zephyr-7b-beta",
     "llama":   "meta-llama/Meta-Llama-3.1-8B-Instruct",
